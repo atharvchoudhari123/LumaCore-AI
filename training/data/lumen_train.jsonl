@@ -1,0 +1,3 @@
+{"messages":[{"role":"user","content":"What is an API?"},{"role":"assistant","content":"An API is a defined interface that lets software systems communicate using agreed requests and responses."}]}
+{"messages":[{"role":"user","content":"What is a variable in programming?"},{"role":"assistant","content":"A variable is a named place in a program that stores a value which the program can read or change."}]}
+{"messages":[{"role":"user","content":"Write a Python function that adds two numbers."},{"role":"assistant","content":"def add(a, b):\n    return a + b"}]}

@@ -1,0 +1,22 @@
+{
+  "models": [
+    {
+      "id": "lumen-3.2",
+      "display_name": "Lumen 3.2",
+      "tier": "fast",
+      "checkpoint_env": "LUMEN_3_2_CHECKPOINT"
+    },
+    {
+      "id": "lumen-4.0",
+      "display_name": "Lumen 4.0",
+      "tier": "general",
+      "checkpoint_env": "LUMEN_4_0_CHECKPOINT"
+    },
+    {
+      "id": "lumen-5.7",
+      "display_name": "Lumen 5.7",
+      "tier": "advanced",
+      "checkpoint_env": "LUMEN_5_7_CHECKPOINT"
+    }
+  ]
+}

@@ -1,0 +1,1832 @@
+<!doctype html>
+
+<html lang="en">
+
+<head>
+
+<meta charset="utf-8">
+
+<meta
+    name="viewport"
+    content="width=device-width,initial-scale=1"
+>
+
+<title>Lumen</title>
+
+
+<style>
+
+*{
+    box-sizing:border-box;
+}
+
+html,
+body{
+    width:100%;
+    height:100%;
+    margin:0;
+}
+
+body{
+
+    background:#08090d;
+
+    color:#f7f7fb;
+
+    font-family:
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+    overflow:hidden;
+
+}
+
+
+.app{
+
+    width:100%;
+    height:100%;
+
+    display:grid;
+
+    grid-template-columns:
+        240px
+        minmax(0,1fr);
+
+}
+
+
+.sidebar{
+
+    background:#0b0c11;
+
+    border-right:
+        1px solid #20232c;
+
+    padding:
+        18px 14px;
+
+    display:flex;
+
+    flex-direction:
+        column;
+
+}
+
+
+.logo{
+
+    padding:
+        10px;
+
+    font-size:
+        22px;
+
+    font-weight:
+        800;
+
+    margin-bottom:
+        22px;
+
+}
+
+
+.nav{
+
+    display:grid;
+
+    gap:7px;
+
+}
+
+
+.nav button{
+
+    padding:
+        11px 12px;
+
+    border:
+        1px solid transparent;
+
+    border-radius:
+        11px;
+
+    background:
+        transparent;
+
+    color:
+        #c8ccd5;
+
+    text-align:
+        left;
+
+    cursor:
+        pointer;
+
+}
+
+
+.nav button.active{
+
+    background:
+        #18152b;
+
+    border-color:
+        #322c5b;
+
+    color:
+        #fff;
+
+}
+
+
+.bottom{
+
+    margin-top:
+        auto;
+
+    padding:
+        10px;
+
+    color:
+        #737b8c;
+
+    font-size:
+        11px;
+
+}
+
+
+.main{
+
+    min-width:0;
+
+    min-height:0;
+
+    display:grid;
+
+    grid-template-rows:
+        65px
+        minmax(0,1fr);
+
+}
+
+
+.top{
+
+    border-bottom:
+        1px solid #20232c;
+
+    padding:
+        0 20px;
+
+    display:flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        space-between;
+
+}
+
+
+.model{
+
+    background:
+        #13151d;
+
+    color:#fff;
+
+    border:
+        1px solid #292d37;
+
+    border-radius:
+        9px;
+
+    padding:
+        9px 12px;
+
+}
+
+
+.chat{
+
+    min-height:0;
+
+    display:grid;
+
+    grid-template-rows:
+        minmax(0,1fr)
+        auto;
+
+}
+
+
+.feed{
+
+    min-height:0;
+
+    overflow-y:auto;
+
+    overflow-x:hidden;
+
+    padding:
+        30px 20px 45px;
+
+    -webkit-overflow-scrolling:
+        touch;
+
+}
+
+
+.inner{
+
+    width:100%;
+
+    max-width:900px;
+
+    margin:auto;
+
+}
+
+
+.hero{
+
+    min-height:
+        calc(100vh - 240px);
+
+    display:grid;
+
+    place-items:center;
+
+    text-align:center;
+
+}
+
+
+.hero h1{
+
+    font-size:
+        42px;
+
+    margin:
+        15px 0;
+
+}
+
+
+.hero p{
+
+    color:
+        #9299a8;
+
+}
+
+
+.message{
+
+    display:flex;
+
+    gap:12px;
+
+    margin-bottom:27px;
+
+}
+
+
+.avatar{
+
+    width:32px;
+
+    height:32px;
+
+    flex:none;
+
+    border-radius:
+        9px;
+
+    display:grid;
+
+    place-items:center;
+
+    font-size:
+        12px;
+
+    font-weight:
+        800;
+
+}
+
+
+.ai{
+
+    background:
+        linear-gradient(
+            135deg,
+            #a79bff,
+            #6651dd
+        );
+
+}
+
+
+.user{
+
+    background:
+        #252b37;
+
+}
+
+
+.body{
+
+    min-width:0;
+
+    max-width:800px;
+
+}
+
+
+.meta{
+
+    color:
+        #747c8c;
+
+    font-size:
+        11px;
+
+    margin-bottom:
+        6px;
+
+}
+
+
+.bubble{
+
+    white-space:
+        pre-wrap;
+
+    overflow-wrap:
+        anywhere;
+
+}
+
+
+.userBubble{
+
+    display:
+        inline-block;
+
+    padding:
+        11px 14px;
+
+    border:
+        1px solid #282c35;
+
+    border-radius:
+        15px;
+
+    background:
+        rgba(255,255,255,.035);
+
+}
+
+
+.composer{
+
+    padding:
+        0 20px 18px;
+
+    background:
+        linear-gradient(
+            to bottom,
+            transparent,
+            #08090d 28%
+        );
+
+}
+
+
+.compose{
+
+    max-width:
+        900px;
+
+    margin:
+        auto;
+
+}
+
+
+.box{
+
+    display:flex;
+
+    gap:
+        10px;
+
+    padding:
+        10px;
+
+    border:
+        1px solid #282c35;
+
+    border-radius:
+        17px;
+
+    background:
+        #11131a;
+
+}
+
+
+.box textarea{
+
+    flex:
+        1;
+
+    min-width:0;
+
+    min-height:
+        45px;
+
+    max-height:
+        170px;
+
+    resize:
+        none;
+
+    border:
+        0;
+
+    outline:
+        0;
+
+    padding:
+        10px;
+
+    background:
+        transparent;
+
+    color:
+        #fff;
+
+}
+
+
+.send{
+
+    width:
+        44px;
+
+    border:
+        0;
+
+    border-radius:
+        12px;
+
+    background:
+        #7d6df2;
+
+    color:
+        #fff;
+
+    cursor:
+        pointer;
+
+    font-weight:
+        800;
+
+}
+
+
+.play{
+
+    min-height:0;
+
+    display:none;
+
+    flex-direction:
+        column;
+
+    padding:
+        24px;
+
+}
+
+
+.play.active{
+
+    display:flex;
+
+}
+
+
+.playHead{
+
+    max-width:
+        1100px;
+
+    width:100%;
+
+    margin:
+        0 auto 14px;
+
+    display:flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        space-between;
+
+}
+
+
+.playGrid{
+
+    flex:
+        1;
+
+    min-height:
+        0;
+
+    max-width:
+        1100px;
+
+    width:100%;
+
+    margin:auto;
+
+    display:grid;
+
+    grid-template-columns:
+        1fr
+        1fr;
+
+    gap:
+        14px;
+
+}
+
+
+.panel{
+
+    min-height:
+        0;
+
+    display:flex;
+
+    flex-direction:
+        column;
+
+    overflow:
+        hidden;
+
+    border:
+        1px solid #282c35;
+
+    border-radius:
+        16px;
+
+    background:
+        #11131a;
+
+}
+
+
+.panelHead{
+
+    height:
+        44px;
+
+    padding:
+        0 13px;
+
+    border-bottom:
+        1px solid #282c35;
+
+    display:flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        space-between;
+
+}
+
+
+.codePrompt{
+
+    flex:
+        1;
+
+    min-height:
+        0;
+
+    resize:
+        none;
+
+    border:
+        0;
+
+    outline:
+        0;
+
+    padding:
+        16px;
+
+    background:
+        #0d0f14;
+
+    color:
+        #fff;
+
+    font:
+        13px/1.6
+        ui-monospace,
+        SFMono-Regular,
+        Menlo,
+        monospace;
+
+}
+
+
+.codeArea{
+
+    flex:
+        1;
+
+    min-height:
+        0;
+
+    overflow:
+        auto;
+
+    background:
+        #0d0f14;
+
+}
+
+
+.toolbar{
+
+    height:
+        43px;
+
+    padding:
+        0 10px;
+
+    border-bottom:
+        1px solid #282c35;
+
+    display:flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        space-between;
+
+}
+
+
+.small{
+
+    border:
+        1px solid #303541;
+
+    background:
+        #151821;
+
+    color:
+        #cbd0db;
+
+    border-radius:
+        8px;
+
+    padding:
+        5px 8px;
+
+    cursor:
+        pointer;
+
+}
+
+
+pre{
+
+    margin:
+        0;
+
+    padding:
+        16px;
+
+    overflow:
+        auto;
+
+    white-space:
+        pre;
+
+    font:
+        13px/1.65
+        ui-monospace,
+        SFMono-Regular,
+        Menlo,
+        monospace;
+
+}
+
+
+@media(max-width:800px){
+
+    .app{
+        grid-template-columns:
+            1fr;
+    }
+
+    .sidebar{
+        display:none;
+    }
+
+    .playGrid{
+        grid-template-columns:
+            1fr;
+
+        grid-template-rows:
+            1fr
+            1fr;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="app">
+
+
+<aside class="sidebar">
+
+
+<div class="logo">
+Lumen.
+</div>
+
+
+<div class="nav">
+
+
+<button
+id="chatTab"
+class="active"
+>
+✦ New chat
+</button>
+
+
+<button
+id="codeTab"
+>
+⌘ Coding Playground
+</button>
+
+
+</div>
+
+
+<div class="bottom">
+
+Lumen Engine<br>
+Your own API
+
+</div>
+
+
+</aside>
+
+
+<main class="main">
+
+
+<header class="top">
+
+
+<strong id="title">
+Lumen
+</strong>
+
+
+<select
+id="model"
+class="model"
+>
+
+
+<option value="lumen-3.2">
+Lumen 3.2
+</option>
+
+
+<option
+value="lumen-4.0"
+selected
+>
+Lumen 4.0
+</option>
+
+
+<option value="lumen-5.7">
+Lumen 5.7
+</option>
+
+
+</select>
+
+
+</header>
+
+
+<!-- CHAT -->
+
+<section
+id="chat"
+class="chat"
+>
+
+
+<div
+id="feed"
+class="feed"
+>
+
+
+<div
+id="inner"
+class="inner"
+>
+
+
+<div
+id="hero"
+class="hero"
+>
+
+
+<div>
+
+
+<div
+class="orb"
+style="
+width:64px;
+height:64px;
+margin:auto;
+border-radius:20px;
+background:linear-gradient(135deg,#b9afff,#6651dd);
+"
+></div>
+
+
+<h1>
+What can I help you build?
+</h1>
+
+
+<p>
+Your own Lumen AI.
+</p>
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+<div class="composer">
+
+
+<div class="compose">
+
+
+<div class="box">
+
+
+<textarea
+id="input"
+placeholder="Message Lumen..."
+></textarea>
+
+
+<button
+id="send"
+class="send"
+>
+↑
+</button>
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+</section>
+
+
+<!-- CODING PLAYGROUND -->
+
+<section
+id="play"
+class="play"
+>
+
+
+<div class="playHead">
+
+
+<div>
+
+
+<h2>
+Coding Playground
+</h2>
+
+
+<p>
+Build code using the selected Lumen model.
+</p>
+
+
+</div>
+
+
+<button
+id="askCode"
+class="ask"
+style="
+border:0;
+border-radius:10px;
+padding:9px 13px;
+background:#8f7cff;
+color:#fff;
+font-weight:800;
+cursor:pointer;
+"
+>
+Ask Lumen
+</button>
+
+
+</div>
+
+
+<div class="playGrid">
+
+
+<div class="panel">
+
+
+<div class="panelHead">
+
+
+<span>
+Request
+</span>
+
+
+<span id="codeModel">
+Lumen 4.0
+</span>
+
+
+</div>
+
+
+<textarea
+id="codePrompt"
+class="codePrompt"
+placeholder="Describe the code you want..."
+></textarea>
+
+
+</div>
+
+
+<div class="panel">
+
+
+<div class="panelHead">
+
+
+<span>
+Generated code
+</span>
+
+
+<span id="codeState">
+Ready
+</span>
+
+
+</div>
+
+
+<div class="codeArea">
+
+
+<div class="toolbar">
+
+
+<span id="language">
+Code
+</span>
+
+
+<div>
+
+
+<button
+id="copyCode"
+class="small"
+>
+Copy
+</button>
+
+
+<button
+id="downloadCode"
+class="small"
+>
+Download
+</button>
+
+
+</div>
+
+
+</div>
+
+
+<pre
+id="code"
+>Your generated code will appear here.</pre>
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+</section>
+
+
+</main>
+
+
+</div>
+
+
+<script>
+
+const feed =
+    document.getElementById(
+        "feed"
+    );
+
+
+const inner =
+    document.getElementById(
+        "inner"
+    );
+
+
+const input =
+    document.getElementById(
+        "input"
+    );
+
+
+const model =
+    document.getElementById(
+        "model"
+    );
+
+
+const history =
+    [];
+
+
+let lastCode =
+    "";
+
+
+/* =========================================================
+   SCROLL
+========================================================= */
+
+function scrollBottom(){
+
+    requestAnimationFrame(
+        () => {
+
+            feed.scrollTop =
+                feed.scrollHeight;
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   ADD MESSAGE
+========================================================= */
+
+function addMessage(
+    role,
+    text
+){
+
+    const hero =
+        document.getElementById(
+            "hero"
+        );
+
+
+    if(hero){
+        hero.remove();
+    }
+
+
+    const row =
+        document.createElement(
+            "div"
+        );
+
+
+    row.className =
+        "message";
+
+
+    const avatar =
+        document.createElement(
+            "div"
+        );
+
+
+    avatar.className =
+        "avatar " +
+        (
+            role === "user"
+                ? "user"
+                : "ai"
+        );
+
+
+    avatar.textContent =
+        role === "user"
+            ? "You"
+            : "L";
+
+
+    const body =
+        document.createElement(
+            "div"
+        );
+
+
+    body.className =
+        "body";
+
+
+    const meta =
+        document.createElement(
+            "div"
+        );
+
+
+    meta.className =
+        "meta";
+
+
+    meta.textContent =
+        role === "user"
+            ? "You"
+            : model.value;
+
+
+    const bubble =
+        document.createElement(
+            "div"
+        );
+
+
+    bubble.className =
+        "bubble";
+
+
+    if(role === "user"){
+
+        bubble.classList.add(
+            "userBubble"
+        );
+
+    }
+
+
+    bubble.textContent =
+        text;
+
+
+    body.append(
+        meta,
+        bubble
+    );
+
+
+    row.append(
+        avatar,
+        body
+    );
+
+
+    inner.append(
+        row
+    );
+
+
+    scrollBottom();
+
+}
+
+
+/* =========================================================
+   CHAT
+========================================================= */
+
+async function sendMessage(){
+
+    const text =
+        input.value.trim();
+
+
+    if(!text){
+        return;
+    }
+
+
+    input.value =
+        "";
+
+
+    addMessage(
+        "user",
+        text
+    );
+
+
+    history.push({
+
+        role:
+            "user",
+
+        content:
+            text
+
+    });
+
+
+    try{
+
+        const response =
+            await fetch(
+                "/v1/chat/completions",
+                {
+
+                    method:
+                        "POST",
+
+                    headers:{
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:
+                        JSON.stringify({
+
+                            model:
+                                model.value,
+
+                            messages:
+                                history,
+
+                            stream:
+                                false
+
+                        })
+
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if(
+            !response.ok
+        ){
+
+            throw new Error(
+                data.detail ||
+                "Lumen request failed."
+            );
+
+        }
+
+
+        const answer =
+            data
+                ?.choices?.[0]
+                ?.message?.content ||
+            "";
+
+
+        if(!answer){
+
+            throw new Error(
+                "Lumen returned no answer."
+            );
+
+        }
+
+
+        history.push({
+
+            role:
+                "assistant",
+
+            content:
+                answer
+
+        });
+
+
+        addMessage(
+            "assistant",
+            answer
+        );
+
+
+    }catch(error){
+
+        history.pop();
+
+
+        addMessage(
+            "assistant",
+            error.message
+        );
+
+    }
+
+}
+
+
+document
+    .getElementById(
+        "send"
+    )
+    .onclick =
+    sendMessage;
+
+
+input.addEventListener(
+    "keydown",
+    event => {
+
+        if(
+            event.key === "Enter" &&
+            !event.shiftKey
+        ){
+
+            event.preventDefault();
+
+            sendMessage();
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   TABS
+========================================================= */
+
+document
+    .getElementById(
+        "chatTab"
+    )
+    .onclick =
+    () => {
+
+        document
+            .getElementById(
+                "chatTab"
+            )
+            .classList
+            .add(
+                "active"
+            );
+
+
+        document
+            .getElementById(
+                "codeTab"
+            )
+            .classList
+            .remove(
+                "active"
+            );
+
+
+        document
+            .getElementById(
+                "chat"
+            )
+            .style
+            .display =
+            "grid";
+
+
+        document
+            .getElementById(
+                "play"
+            )
+            .classList
+            .remove(
+                "active"
+            );
+
+
+        document
+            .getElementById(
+                "title"
+            )
+            .textContent =
+            "Lumen";
+
+    };
+
+
+document
+    .getElementById(
+        "codeTab"
+    )
+    .onclick =
+    () => {
+
+        document
+            .getElementById(
+                "codeTab"
+            )
+            .classList
+            .add(
+                "active"
+            );
+
+
+        document
+            .getElementById(
+                "chatTab"
+            )
+            .classList
+            .remove(
+                "active"
+            );
+
+
+        document
+            .getElementById(
+                "chat"
+            )
+            .style
+            .display =
+            "none";
+
+
+        document
+            .getElementById(
+                "play"
+            )
+            .classList
+            .add(
+                "active"
+            );
+
+
+        document
+            .getElementById(
+                "title"
+            )
+            .textContent =
+            "Coding Playground";
+
+    };
+
+
+/* =========================================================
+   CODING PLAYGROUND
+========================================================= */
+
+document
+    .getElementById(
+        "askCode"
+    )
+    .onclick =
+    async () => {
+
+        const request =
+            document
+                .getElementById(
+                    "codePrompt"
+                )
+                .value
+                .trim();
+
+
+        if(!request){
+            return;
+        }
+
+
+        const output =
+            document
+                .getElementById(
+                    "code"
+                );
+
+
+        const state =
+            document
+                .getElementById(
+                    "codeState"
+                );
+
+
+        state.textContent =
+            "Generating…";
+
+
+        output.textContent =
+            "";
+
+
+        try{
+
+            const response =
+                await fetch(
+                    "/v1/chat/completions",
+                    {
+
+                        method:
+                            "POST",
+
+                        headers:{
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        body:
+                            JSON.stringify({
+
+                                model:
+                                    model.value,
+
+                                mode:
+                                    "code",
+
+                                messages:[
+
+                                    {
+
+                                        role:
+                                            "user",
+
+                                        content:
+                                            request
+
+                                    }
+
+                                ],
+
+                                stream:
+                                    false
+
+                            })
+
+                    }
+                );
+
+
+            const data =
+                await response.json();
+
+
+            if(
+                !response.ok
+            ){
+
+                throw new Error(
+                    data.detail ||
+                    "Coding request failed."
+                );
+
+            }
+
+
+            lastCode =
+                data
+                    ?.choices?.[0]
+                    ?.message?.content ||
+                "";
+
+
+            if(
+                !lastCode
+            ){
+
+                throw new Error(
+                    "No code returned."
+                );
+
+            }
+
+
+            output.textContent =
+                lastCode;
+
+
+            state.textContent =
+                "Ready";
+
+
+        }catch(error){
+
+            output.textContent =
+                error.message;
+
+
+            state.textContent =
+                "Failed";
+
+        }
+
+    };
+
+
+/* =========================================================
+   COPY
+========================================================= */
+
+document
+    .getElementById(
+        "copyCode"
+    )
+    .onclick =
+    async () => {
+
+        if(!lastCode){
+            return;
+        }
+
+
+        await navigator
+            .clipboard
+            .writeText(
+                lastCode
+            );
+
+
+        document
+            .getElementById(
+                "codeState"
+            )
+            .textContent =
+            "Copied";
+
+
+        setTimeout(
+            () => {
+
+                document
+                    .getElementById(
+                        "codeState"
+                    )
+                    .textContent =
+                    "Ready";
+
+            },
+            1000
+        );
+
+    };
+
+
+/* =========================================================
+   DOWNLOAD
+========================================================= */
+
+document
+    .getElementById(
+        "downloadCode"
+    )
+    .onclick =
+    () => {
+
+        if(!lastCode){
+            return;
+        }
+
+
+        const blob =
+            new Blob(
+                [lastCode],
+                {
+                    type:
+                        "text/plain;charset=utf-8"
+                }
+            );
+
+
+        const url =
+            URL.createObjectURL(
+                blob
+            );
+
+
+        const link =
+            document.createElement(
+                "a"
+            );
+
+
+        link.href =
+            url;
+
+
+        link.download =
+            "lumen-generated.txt";
+
+
+        document
+            .body
+            .appendChild(
+                link
+            );
+
+
+        link.click();
+
+
+        link.remove();
+
+
+        URL.revokeObjectURL(
+            url
+        );
+
+    };
+
+</script>
+
+</body>
+
+</html>
