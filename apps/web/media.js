@@ -104,7 +104,22 @@
     }
   }
 
-  // Replace the existing send button handler with a media-aware wrapper.
+  // Normal chat prompts such as "create an image of ..." are routed by the API.
+  // Clone the response so the existing chat code can keep processing it normally.
+  const nativeFetch = window.fetch.bind(window);
+  window.fetch = async (...args) => {
+    const response = await nativeFetch(...args);
+    const requestUrl = typeof args[0] === "string" ? args[0] : args[0]?.url;
+    if (requestUrl && requestUrl.endsWith("/v1/chat/completions")) {
+      response.clone().json().then(data => {
+        if (data?.media?.type && data.media.url) {
+          addMediaCard(data.media.type, data.media);
+        }
+      }).catch(() => {});
+    }
+    return response;
+  };
+
   const originalSend = send.onclick;
   send.onclick = () => {
     const prompt = input.value.trim();
