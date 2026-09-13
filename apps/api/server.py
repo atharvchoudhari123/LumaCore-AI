@@ -14,6 +14,7 @@ from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.responses import FileResponse, HTMLResponse, StreamingResponse
 from pydantic import BaseModel, Field
 
+from engine.context import attach_files, build_system_prompt
 from engine.model_registry import get_model, get_models
 from plugins.registry import PluginError, get_plugin, list_plugins, run_plugin
 
@@ -64,6 +65,13 @@ def media_url(path: Path) -> str:
     return f"/v1/media/files/{path.name}"
 
 
+def uses_fable_5_1(model_id: str) -> bool:
+    return (
+        model_id == "lumacore-5.7"
+        and os.getenv("LUMACORE_5_7_PROVIDER", "local").strip().lower() == "anthropic"
+    )
+
+
 @app.get("/health")
 async def health():
     return {
@@ -71,6 +79,10 @@ async def health():
         "service": "lumacore-api",
         "version": "0.5.0",
         "fast_mode": FAST_MODE,
+        "fable_5_1": {
+            "enabled": uses_fable_5_1("lumacore-5.7"),
+            "model": os.getenv("LUMACORE_5_7_ANTHROPIC_MODEL", "claude-fable-5-1"),
+        },
         "media": {"image": True, "video": True},
     }
 
@@ -279,8 +291,7 @@ async def chat(request: ChatRequest):
     files = [file.model_dump() for file in request.files]
     media_kind = media_intent(request.messages[-1].content)
 
-    # Media requests are routed to the dedicated generation runtime. Normal
-    # text, coding, security, files and plugins continue through the old path.
+    # Dedicated media generation preserves normal chat/coding/security flows.
     if media_kind:
         prompt = request.messages[-1].content
         try:
@@ -298,6 +309,26 @@ async def chat(request: ChatRequest):
             }
         except Exception as error:
             raise HTTPException(status_code=500, detail=str(error)) from error
+    elif uses_fable_5_1(request.model):
+        # LumaCore 5.7 keeps its public model identity while using Claude
+        # Fable 5.1 for hosted inference. The same system prompt and uploaded
+        # text-file context used by the local engine are preserved here.
+        try:
+            from engine.anthropic_runtime import anthropic_runtime
+            normalized = attach_files(messages, files)
+            system = build_system_prompt("LumaCore 5.7", request.mode)
+            final_messages = [
+                {"role": "system", "content": system},
+                *normalized,
+            ]
+            text = anthropic_runtime.generate(
+                model=os.getenv("LUMACORE_5_7_ANTHROPIC_MODEL", "claude-fable-5-1"),
+                messages=final_messages,
+                max_new_tokens=request.max_new_tokens,
+            )
+            media = None
+        except Exception as error:
+            raise HTTPException(status_code=502, detail=str(error)) from error
     else:
         media = None
         if FAST_MODE:
