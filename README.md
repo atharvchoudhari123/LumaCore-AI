@@ -1,11 +1,11 @@
-# Lumen
+# LumaCore
 
-Lumen is a self-hosted AI platform.
+LumaCore is a self-hosted AI platform.
 
 It contains:
 
-- Lumen API
-- Lumen Engine
+- LumaCore API
+- LumaCore Engine
 - Model registry
 - Model runtime
 - Training pipeline
@@ -14,25 +14,26 @@ It contains:
 - Coding Playground
 - Docker configuration
 
-## Lumen models
+## LumaCore models
 
-Lumen 3.2
-Lumen 4.0
-Lumen 5.7
+LumaCore 3.2  
+LumaCore 4.0  
+LumaCore 5.7
 
-These are the Lumen product tiers.
+These are the LumaCore product tiers.
 
 The actual model checkpoints are configured separately.
 
 ## Architecture
 
+```text
 Browser
     |
     v
-Lumen API
+LumaCore API
     |
     v
-Lumen Engine
+LumaCore Engine
     |
     +-- Memory
     |
@@ -43,52 +44,122 @@ Lumen Engine
     +-- Model Router
     |
     v
-Lumen Runtime
+LumaCore Runtime
     |
     v
-Lumen Model
+LumaCore Model
+```
 
 ## Install
 
 Create a virtual environment:
 
-    python3 -m venv .venv
+```bash
+python3 -m venv .venv
+```
 
 Activate it:
 
-    source .venv/bin/activate
+```bash
+source .venv/bin/activate
+```
 
 Install dependencies:
 
-    pip install -r requirements.txt
+```bash
+pip install -r requirements.txt
+```
 
-Copy the environment file:
+## Train all LumaCore model tiers
 
-    cp .env.example .env
+Run the unified training script:
+
+```bash
+chmod +x train_all.sh
+./train_all.sh
+```
+
+The script trains the three LumaCore tiers separately:
+
+```text
+LumaCore 3.2
+LumaCore 4.0
+LumaCore 5.7
+```
+
+The resulting checkpoints are stored in:
+
+```text
+training/output/lumacore-3.2
+training/output/lumacore-4.0
+training/output/lumacore-5.7
+```
+
+The training script also creates the tier-specific training data and configuration it needs.
+
+
+After training, make sure `.env` points each LumaCore tier to its corresponding checkpoint:
+
+```env
+LUMACORE_3_2_CHECKPOINT=./training/output/lumacore-3.2
+LUMACORE_4_0_CHECKPOINT=./training/output/lumacore-4.0
+LUMACORE_5_7_CHECKPOINT=./training/output/lumacore-5.7
+```
 
 ## Start
 
-    python3 apps/api/server.py
+Start the LumaCore API:
+
+```bash
+python3 apps/api/server.py
+```
 
 Open:
 
-    http://localhost:3000
+```text
+http://localhost:3000
+```
 
-## Training
+## Model tiers
 
-The first training prototype is located in:
+### LumaCore 3.2
 
-    training/train_sft.py
+Designed as the faster, lightweight LumaCore tier.
 
-The sample dataset is:
+### LumaCore 4.0
 
-    training/data/lumen_train.jsonl
+Designed as the balanced general-purpose LumaCore tier.
+
+### LumaCore 5.7
+
+Designed as the highest-capability LumaCore tier, with the largest practical model and most extensive training configuration.
+
+## Capabilities
+
+LumaCore is designed to support:
+
+- Chat
+- Multi-turn conversations
+- Coding
+- Debugging
+- File analysis
+- Website generation
+- Plugin/tool integration
+- Defensive security review
+- Image generation
+- Video generation
+- Custom model training
+- Multiple model tiers
 
 ## Important
 
-This repository contains the Lumen software platform and
-training infrastructure.
+The quality of each LumaCore model depends on:
 
-It does not automatically contain a frontier-scale trained
-model. A real checkpoint must be trained or supplied and then
-configured through the Lumen runtime.
+- Base model
+- Training data
+- Training configuration
+- Available compute
+- Fine-tuning method
+- Model size
+
+Training the models does not automatically create a frontier-scale AI model. Larger and higher-quality datasets and appropriate compute are required to substantially improve model capabilities.
