@@ -1,11 +1,11 @@
-# Lumen
+# LumaCore
 
-Lumen is a self-hosted AI platform.
+LumaCore is a self-hosted AI platform.
 
 It contains:
 
-- Lumen API
-- Lumen Engine
+- LumaCore API
+- LumaCore Engine
 - Model registry
 - Model runtime
 - Training pipeline
@@ -14,13 +14,13 @@ It contains:
 - Coding Playground
 - Docker configuration
 
-## Lumen models
+## LumaCore models
 
-Lumen 3.2
-Lumen 4.0
-Lumen 5.7
+LumaCore 3.2
+LumaCore 4.0
+LumaCore 5.7
 
-These are the Lumen product tiers.
+These are the LumaCore product tiers.
 
 The actual model checkpoints are configured separately.
 
@@ -29,10 +29,10 @@ The actual model checkpoints are configured separately.
 Browser
     |
     v
-Lumen API
+LumaCore API
     |
     v
-Lumen Engine
+LumaCore Engine
     |
     +-- Memory
     |
@@ -43,10 +43,10 @@ Lumen Engine
     +-- Model Router
     |
     v
-Lumen Runtime
+LumaCore Runtime
     |
     v
-Lumen Model
+LumaCore Model
 
 ## Install
 
@@ -62,9 +62,28 @@ Install dependencies:
 
     pip install -r requirements.txt
 
-Copy the environment file:
+## Train all LumaCore model tiers
+
+Run the single training script to build the separate 3.2, 4.0, and 5.7 checkpoints:
+
+    chmod +x train_all.sh
+    ./train_all.sh
+
+The script creates the tier-specific training data/configuration it needs, trains each tier separately, saves the checkpoints under `training/output/`, and updates the local `.env` checkpoint paths.
+
+The resulting model directories are:
+
+    training/output/lumacore-3.2
+    training/output/lumacore-4.0
+    training/output/lumacore-5.7
+
+## Configure environment
+
+Copy the example environment file:
 
     cp .env.example .env
+
+If you have already trained the models, make sure `.env` points each tier to its corresponding checkpoint directory.
 
 ## Start
 
@@ -74,21 +93,8 @@ Open:
 
     http://localhost:3000
 
-## Training
-
-The first training prototype is located in:
-
-    training/train_sft.py
-
-The sample dataset is:
-
-    training/data/lumen_train.jsonl
-
 ## Important
 
-This repository contains the Lumen software platform and
-training infrastructure.
+This repository contains the LumaCore software platform and training infrastructure.
 
-It does not automatically contain a frontier-scale trained
-model. A real checkpoint must be trained or supplied and then
-configured through the Lumen runtime.
+The quality of each model depends on the base checkpoint, training data, training configuration, and available compute. The training script creates separate checkpoints for 3.2, 4.0, and 5.7; it does not by itself guarantee frontier-scale capabilities.
