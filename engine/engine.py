@@ -1,10 +1,10 @@
 from .context import build_system_prompt, attach_files
 from .memory import memory
-from .model_registry import get_model, get_checkpoint
+from .model_registry import get_model, get_checkpoint, normalize_model_id
 from .runtime import runtime
 
 
-class LumenEngine:
+class LumaCoreEngine:
     def complete(
         self,
         model_id,
@@ -14,13 +14,28 @@ class LumenEngine:
         max_new_tokens=512,
         plugins=None,
     ):
-        model = get_model(model_id)
-        if model is None:
-            raise ValueError(f"Unknown Lumen model: {model_id}")
+        # Accept legacy Lumen IDs while using canonical LumaCore IDs internally.
+        canonical_model_id = normalize_model_id(model_id)
+        model = get_model(canonical_model_id)
 
-        checkpoint = get_checkpoint(model_id)
+        if model is None:
+            raise ValueError(f"Unknown LumaCore model: {model_id}")
+
+        checkpoint = get_checkpoint(canonical_model_id)
         normalized = memory.normalize(messages)
-        system = build_system_prompt(model["display_name"], mode)
+
+        user_message = ""
+        for message in reversed(normalized):
+            if message.get("role") == "user":
+                user_message = message.get("content", "")
+                break
+
+        system = build_system_prompt(
+            model["display_name"],
+            mode=mode,
+            user_message=user_message,
+        )
+
         normalized = attach_files(normalized, files or [])
 
         final_messages = [
@@ -35,4 +50,4 @@ class LumenEngine:
         )
 
 
-engine = LumenEngine()
+engine = LumaCoreEngine()
