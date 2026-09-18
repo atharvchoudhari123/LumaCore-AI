@@ -145,11 +145,12 @@ class ModelRuntime:
 
 
         generation_kwargs = {
-            "max_new_tokens":
-                max_new_tokens,
-
-            "pad_token_id":
-                tokenizer.eos_token_id
+            "max_new_tokens": max_new_tokens,
+            "pad_token_id": tokenizer.pad_token_id or tokenizer.eos_token_id,
+            "eos_token_id": tokenizer.eos_token_id,
+            "repetition_penalty": 1.05,
+            "top_p": 0.8,
+            "top_k": 20,
         }
 
 
