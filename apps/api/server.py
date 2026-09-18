@@ -15,7 +15,7 @@ from fastapi.responses import FileResponse, HTMLResponse, StreamingResponse
 from pydantic import BaseModel, Field
 
 from engine.context import attach_files, build_system_prompt
-from engine.model_registry import get_model, get_models
+from engine.model_registry import get_model, get_models, normalize_model_id
 from plugins.registry import PluginError, get_plugin, list_plugins, run_plugin
 
 load_dotenv(ROOT / ".env")
@@ -282,6 +282,8 @@ def media_intent(text: str) -> str | None:
 
 @app.post("/v1/chat/completions")
 async def chat(request: ChatRequest):
+    request.model = normalize_model_id(request.model)
+
     if not request.messages:
         raise HTTPException(status_code=400, detail="messages is required.")
     if get_model(request.model) is None:
